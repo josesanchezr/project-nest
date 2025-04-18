@@ -12,10 +12,14 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCreatedResponse } from '@nestjs/swagger';
+import { CustomLoggerService } from 'src/common/logger/custom-logger.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly logger: CustomLoggerService,
+  ) {}
 
   @Post()
   @ApiCreatedResponse({
@@ -24,6 +28,7 @@ export class UsersController {
   })
   @HttpCode(201)
   create(@Body() createUserDto: CreateUserDto) {
+    this.logger.log('Handling request in create user');
     return this.usersService.create(createUserDto);
   }
 
